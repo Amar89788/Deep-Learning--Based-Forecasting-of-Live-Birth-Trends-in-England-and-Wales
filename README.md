@@ -1,7 +1,7 @@
 # Deep Learning-Based Forecasting of Live Birth Trends in England and Wales
 
 This project forecasts the UK live birth rate using deep learning. It builds and compares
-three neural network models — GRU, LSTM and a 1D CNN — on 64 years of annual data, to
+three neural network models - GRU, LSTM and a 1D CNN - on 64 years of annual data, to
 answer one question: how effectively can deep learning forecast long-term birth trends
 from demographic time-series data?
 
@@ -23,15 +23,15 @@ the World Bank API as a fallback.
 
 ## Method
 
-1. **Load and clean** — filter the CSV to the UK, keep Year and Birth Rate, sort chronologically and set Year as the index.
-2. **EDA** — trend line, distribution (histogram + KDE), box plot, lag-1 plot and autocorrelation (ACF) plot.
-3. **Split** — chronological, no shuffling: 1960–2010 for training (51 points), 2011–2023 for testing (13 points).
-4. **Differencing** — the models forecast the year-on-year *change*, not the level. This is the key step: 2023 is the lowest value in the whole series, and a scaled network cannot predict below its training range, so a level-based model bends the forecast the wrong way. Predictions are reconstructed as the previous actual level plus the predicted change.
-5. **Scaling** — a MinMaxScaler is fitted on the training-period changes only (no leakage), then applied to the full series.
-6. **Windowing** — 5-year sliding windows (the previous 5 changes predict the next).
-7. **Modelling** — GRU, LSTM and 1D CNN, each trained as a 5-seed ensemble (seeds 42–46) with predictions averaged.
-8. **Evaluation** — MAE, RMSE, R² and MAPE on the 2011–2023 test set.
-9. **Forecast** — a recursive multi-step forecast to 2030.
+1. **Load and clean** - filter the CSV to the UK, keep Year and Birth Rate, sort chronologically and set Year as the index.
+2. **EDA** - trend line, distribution (histogram + KDE), box plot, lag-1 plot and autocorrelation (ACF) plot.
+3. **Split** - chronological, no shuffling: 1960–2010 for training (51 points), 2011–2023 for testing (13 points).
+4. **Differencing** - the models forecast the year-on-year *change*, not the level. This is the key step: 2023 is the lowest value in the whole series, and a scaled network cannot predict below its training range, so a level-based model bends the forecast the wrong way. Predictions are reconstructed as the previous actual level plus the predicted change.
+5. **Scaling** - a MinMaxScaler is fitted on the training-period changes only (no leakage), then applied to the full series.
+6. **Windowing** - 5-year sliding windows (the previous 5 changes predict the next).
+7. **Modelling** - GRU, LSTM and 1D CNN, each trained as a 5-seed ensemble (seeds 42–46) with predictions averaged.
+8. **Evaluation** - MAE, RMSE, R² and MAPE on the 2011–2023 test set.
+9. **Forecast** - a recursive multi-step forecast to 2030.
 
 ## Models
 
@@ -39,9 +39,9 @@ All models use a 5-year input window and are trained with the Adam optimiser (le
 rate 0.001), MSE loss, batch size 4, up to 500 epochs, and early stopping (patience 60,
 restore best weights). Each is a 5-seed ensemble.
 
-- **GRU** — one GRU layer (64 units, tanh) → Dropout(0.1) → Dense(1)
-- **LSTM** — one LSTM layer (64 units, tanh) → Dropout(0.1) → Dense(1)
-- **1D CNN** — Conv1D (64 filters, kernel size 2, ReLU) → Flatten → Dense(1)
+- **GRU** - one GRU layer (64 units, tanh) → Dropout(0.1) → Dense(1)
+- **LSTM** - one LSTM layer (64 units, tanh) → Dropout(0.1) → Dense(1)
+- **1D CNN** - Conv1D (64 filters, kernel size 2, ReLU) → Flatten → Dense(1)
 
 ## Results (test set 2011–2023)
 
